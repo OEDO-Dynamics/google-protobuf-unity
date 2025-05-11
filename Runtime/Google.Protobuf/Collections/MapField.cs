@@ -82,6 +82,20 @@ namespace Google.Protobuf.Collections
         private readonly LinkedList<KeyValuePair<TKey, TValue>> list = new LinkedList<KeyValuePair<TKey, TValue>>();
 
         /// <summary>
+        /// Merges entries from an <see cref="IDictionary{TKey, TValue}"/> into this instance.
+        /// </summary>
+        /// <param name="other">
+        /// The dictionary whose entries will be merged into this map.
+        /// </param>
+        public void MergeFrom(IDictionary<TKey, TValue> other)
+        {
+            foreach (var kv in other)
+            {
+                this[kv.Key] = kv.Value;
+            }
+        }
+
+        /// <summary>
         /// Merges entries from another <see cref="MapField{TKey, TValue}"/> into this instance.
         /// </summary>
         /// <param name="other">
@@ -90,15 +104,9 @@ namespace Google.Protobuf.Collections
         public void MergeFrom(MapField<TKey, TValue> other)
         {
             // Reuse the IDictionary<TKey, TValue> MergeFrom implementation
-            MergeFrom((System.Collections.Generic.IDictionary<TKey, TValue>)other);
+            MergeFrom((IDictionary<TKey, TValue>)other);
         }
-
-        public void MergeFrom(MapField<TKey, TValue> other)
-        {
-            // IDictionary<TKey,TValue> 用の MergeFrom を再利用
-            MergeFrom((System.Collections.Generic.IDictionary<TKey, TValue>)other);
-        }
-
+        
         /// <summary>
         /// Creates a deep clone of this object.
         /// </summary>
